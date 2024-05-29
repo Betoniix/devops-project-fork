@@ -11,13 +11,13 @@ pipeline {
     stages {
         stage("Deploy"){
             steps {
-                sh "docker run --network=elastic-network -p 3301:3301 --name ${CONTAINER_NAME} ${CONTAINER_IMAGE}"
+                sh "docker run --network=host -p 3301:3301 --name ${CONTAINER_NAME} ${CONTAINER_IMAGE}"
             }
         }
 
-        stage('Connect to host') {
+        stage('Connect to elastic-network') {
             steps {
-                sh "docker network connect host ${CONTAINER_NAME}"
+                sh "docker network connect elastic-network ${CONTAINER_NAME}"
                 sh "docker network inspect host"
             }
         }
