@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage("Deploy") {
             steps {
-                sh 'docker run -d -e DB_HOST=host.docker.internal --net elastic-network --net host -p 4000:4000 --name segunda-entrega-\$BRANCH_NAME_CLEANED-\$BUILD_NUMBER segunda-entrega-\$BRANCH_NAME_CLEANED:1.0.0-\$BUILD_NUMBER'
+                sh 'docker run -d --add-host host.docker.internal:host-gateway --net elastic-network -p 4000:4000 --name segunda-entrega-\$BRANCH_NAME_CLEANED-\$BUILD_NUMBER segunda-entrega-\$BRANCH_NAME_CLEANED:1.0.0-\$BUILD_NUMBER'
             }
         }
     }
