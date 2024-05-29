@@ -9,17 +9,16 @@ pipeline {
     }
     
     stages {
-        stage('Deploying') {
+        stage("Deploy"){
             steps {
-                script {
-                    // Iniciar el contenedor
-                    sh "docker run -d --network=elastic-network -p 3301:3301 --name ${CONTAINER_NAME} ${CONTAINER_IMAGE}"
-                    echo "Contenedor ${CONTAINER_NAME} creado y en ejecución."
+                sh "docker run --network=elastic-network -p 3301:3301 --name ${CONTAINER_NAME} ${CONTAINER_IMAGE}"
+            }
+        }
 
-                    // Conectar el contenedor a la red host
-                    sh "docker network connect host ${CONTAINER_NAME}"
-                    sh "docker network inspect host"
-                }
+        stage('Connect to host') {
+            steps {
+                sh "docker network connect host ${CONTAINER_NAME}"
+                sh "docker network inspect host"
             }
         }
     }
