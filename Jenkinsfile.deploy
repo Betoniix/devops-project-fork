@@ -10,10 +10,8 @@ pipeline {
     stages {
         stage('Deploying') {
             steps {
-                sh "docker run -d --network=elastic-network -p 3301:3301 --name segunda-entrega-${BRANCH_NAME_CLEANED}-${BUILD_NUMBER} ${CONTAINER}"
-                sh "docker network connect host ${CONTAINER}"
+                sh "docker run -d --network=elastic-network -p 3301:3301 --name segunda-entrega-${BRANCH_NAME_CLEANED}-${BUILD_NUMBER} ${CONTAINER} && docker network connect host ${CONTAINER} && docker network connect host ${CONTAINER}"
                 sh "docker network inspect host"
-
             }
         }
     }
