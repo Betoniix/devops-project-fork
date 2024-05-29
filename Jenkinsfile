@@ -24,7 +24,7 @@ pipeline {
 
           stage('Call Deploy') {
             steps {
-                build job: 'Deploy  Back' wait: false
+                build job: 'Deploy  Back' wait: true
             }
         }
         
