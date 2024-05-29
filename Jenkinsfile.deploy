@@ -4,14 +4,22 @@ pipeline {
     environment {
         BRANCH_NAME_CLEANED = "${params.BRANCH_NAME_CLEANED}"
         BUILD_NUMBER = "${params.BUILD_NUMBER}"
-        CONTAINER = "segunda-entrega-${BRANCH_NAME_CLEANED}:1.0.0-${BUILD_NUMBER}"
+        CONTAINER_NAME = "segunda-entrega-${BRANCH_NAME_CLEANED}-${BUILD_NUMBER}"
+        CONTAINER_IMAGE = "segunda-entrega-${BRANCH_NAME_CLEANED}:1.0.0-${BUILD_NUMBER}"
     }
     
     stages {
         stage('Deploying') {
             steps {
-                sh "docker run -d --network=elastic-network -p 3301:3301 --name segunda-entrega-${BRANCH_NAME_CLEANED}-${BUILD_NUMBER} ${CONTAINER} && docker network connect host ${CONTAINER} && docker network connect host ${CONTAINER}"
-                sh "docker network inspect host"
+                script {
+                    // Iniciar el contenedor
+                    sh "docker run -d --network=elastic-network -p 3301:3301 --name ${CONTAINER_NAME} ${CONTAINER_IMAGE}"
+                    echo "Contenedor ${CONTAINER_NAME} creado y en ejecución."
+
+                    // Conectar el contenedor a la red host
+                    sh "docker network connect host ${CONTAINER_NAME}"
+                    sh "docker network inspect host"
+                }
             }
         }
     }
