@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Iniciar el contenedor y conectarlo directamente a la red elastic-network
-                    sh "docker run -d --network elastic-network -p 3301:3301 --name ${CONTAINER_NAME} ${CONTAINER_IMAGE}"
+                    sh "docker run -d --network host -p 3301:3301 --name ${CONTAINER_NAME} ${CONTAINER_IMAGE}"
                     echo "Contenedor ${CONTAINER_NAME} creado y conectado a la red elastic-network."
 
                     // Verificar la conexión del contenedor a la red elastic-network
