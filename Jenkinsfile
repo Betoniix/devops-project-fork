@@ -21,10 +21,12 @@ pipeline {
                 sh 'docker ps -a -q --filter "name=segunda-entrega-\$BRANCH_NAME_CLEANED" | xargs -r docker rm'
             }
         }
-        stage('Call Deploy') {
+
+          stage('Call Deploy') {
             steps {
-                sh 'docker run -d --network=elastic-network -p 3301:3301 --name segunda-entrega-\$BRANCH_NAME_CLEANED-\$BUILD_NUMBER segunda-entrega-\$BRANCH_NAME_CLEANED:1.0.0-\$BUILD_NUMBER'
+                build job: 'Jenkinsfile.deploy' wait: false
             }
         }
+        
     }
 }
