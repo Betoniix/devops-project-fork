@@ -24,7 +24,9 @@ pipeline {
 
           stage('Call Deploy') {
             steps {
-                build job: 'Deploy Back', wait: true, parameters: [string(name: "build", value:"$BUILD_NUMBER")]
+                build job: 'Deploy Back', wait: true, parameters: [
+                    string(name: "BUILD", value: "${BUILD_NUMBER}")
+                ]
             }
         }
         
