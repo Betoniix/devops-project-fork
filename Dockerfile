@@ -21,7 +21,7 @@ RUN npm install -g prisma
 RUN prisma generate
 
 # Expone el puerto 3301
-EXPOSE 3301
+EXPOSE 4000
 
 RUN apt-get update && apt-get install -y curl
 
