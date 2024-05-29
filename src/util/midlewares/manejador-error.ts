@@ -8,6 +8,8 @@ export const ManejadorError = (
   res: Response,
   __: NextFunction
 ) => {
+  console.log(err);
+
   if (err instanceof ErrorPersonalizado) {
     logger.error(
       `CODE: ${err.code} Error: ${err.name} Message: ${err.message}`
