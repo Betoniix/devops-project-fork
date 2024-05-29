@@ -21,9 +21,12 @@ pipeline {
                 sh 'docker ps -a -q --filter "name=segunda-entrega-\$BRANCH_NAME_CLEANED" | xargs -r docker rm'
             }
         }
-        stage('Run Docker Container') {
+        stage('Call Deploy') {
             steps {
-                sh 'docker run -d --network=elastic-network -p 3301:3301 --name segunda-entrega-\$BRANCH_NAME_CLEANED-\$BUILD_NUMBER segunda-entrega-\$BRANCH_NAME_CLEANED:1.0.0-\$BUILD_NUMBER'
+                build job: 'Deploy Back', wait: true, parameters: [
+                    string(name: "BRANCH_NAME_CLEANED", value: "${BRANCH_NAME_CLEANED}"),
+                    string(name: "BUILD_NUMBER", value: "${BUILD_NUMBER}")
+                ]
             }
         }
     }
