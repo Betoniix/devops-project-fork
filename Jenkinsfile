@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+    
+    environment {
+        BRANCH_NAME_CLEANED = sh(script: 'echo \$GIT_BRANCH | sed \'s/origin\\///\'', returnStdout: true).trim()
+    }
+    
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t segunda-entrega-\$BRANCH_NAME_CLEANED:1.0.0-\$BUILD_NUMBER ."
+            }
+        }
+        stage('Stop Previous Containers') {
+            steps {
+                sh 'docker ps -q --filter "name=segunda-entrega-\$BRANCH_NAME_CLEANED" | xargs -r docker stop'
+            }
+        }
+        stage('Remove Stopped Containers') {
+            steps {
+                sh 'docker ps -a -q --filter "name=segunda-entrega-\$BRANCH_NAME_CLEANED" | xargs -r docker rm'
+            }
+        }
+        stage('Call Deploy') {
+            steps {
+                sh 'docker run -d --network=elastic-network -p 3301:3301 --name segunda-entrega-\$BRANCH_NAME_CLEANED-\$BUILD_NUMBER segunda-entrega-\$BRANCH_NAME_CLEANED:1.0.0-\$BUILD_NUMBER'
+            }
+        }
+    }
+}

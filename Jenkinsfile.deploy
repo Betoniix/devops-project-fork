@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+    
+    environment {
+        BRANCH_NAME_CLEANED = sh(script: 'echo \$GIT_BRANCH | sed \'s/origin\\///\'', returnStdout: true).trim()
+    }
+    
+    stages {
+        stage('Deploy Docker Container') {
+            steps {
+                build job: 'Jenkinsfile.deploy' wait: false
+            }
+        }
+    }
+}
